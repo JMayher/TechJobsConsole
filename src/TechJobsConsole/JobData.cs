@@ -38,16 +38,46 @@ namespace TechJobsConsole
             return values;
         }
 
-        public static List<Dictionary<string, string>> FindByColumnAndValue(string column, string value)
+        public static List<Dictionary<string, string>> FindByValue(string searchTerm)
         {
-            // load data, if not already loaded
             LoadData();
 
             List<Dictionary<string, string>> jobs = new List<Dictionary<string, string>>();
 
             foreach (Dictionary<string, string> row in AllJobs)
             {
+                int x = 0;
+                foreach (KeyValuePair<string, string> job in row)
+                {
+                   
+                    string job1 = job.ToString();
+                    job1 = job1.ToUpper();
+                    searchTerm = searchTerm.ToUpper();
+                    
+
+                    if (job1.Contains(searchTerm) & x == 0) 
+                    
+                    {
+                        jobs.Add(row);
+                        x = 1;
+                    }
+                }
+            }
+
+            return jobs;
+        }                                                 
+
+        public static List<Dictionary<string, string>> FindByColumnAndValue(string column, string value)
+        {
+            // load data, if not already loaded
+
+            List<Dictionary<string, string>> jobs = new List<Dictionary<string, string>>();
+
+            foreach (Dictionary<string, string> row in AllJobs)
+            {
                 string aValue = row[column];
+                aValue = aValue.ToUpper();
+                value = value.ToUpper();
 
                 if (aValue.Contains(value))
                 {
@@ -70,8 +100,9 @@ namespace TechJobsConsole
             }
 
             List<string[]> rows = new List<string[]>();
+            
 
-            using (StreamReader reader = File.OpenText("job_data.csv"))
+            using (StreamReader reader = File.OpenText(@"C:\Users\Jonathan\lc101\TechJobsConsole\src\TechJobsConsole\job_data.csv"))
             {
                 while (reader.Peek() >= 0)
                 {
